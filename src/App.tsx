@@ -49,6 +49,12 @@ function App() {
       ]);
       setProfile(profileRes.data.profile);
       setProjects(projectsRes.data.projects);
+
+      const avatarUrl = profileRes.data.profile?.avatarUrl;
+      if (avatarUrl) {
+        const favicon = document.getElementById('favicon') as HTMLLinkElement;
+        if (favicon) favicon.href = avatarUrl;
+      }
     } catch (error) {
       console.error('Failed to fetch data:', error);
     } finally {
