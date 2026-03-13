@@ -1,7 +1,7 @@
-// ============================================================
-// THEME CONFIG — Change colors HERE and they update EVERYWHERE
-// Same theme shared with admin — keep in sync
-// ============================================================
+
+
+
+
 
 export const theme = {
     primary: {

@@ -24,7 +24,7 @@ function App() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Intersection Observer for scroll reveal
+  
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
@@ -74,7 +74,7 @@ function App() {
 
   return (
     <>
-      {/* ========== NAVBAR ========== */}
+      {}
       <nav className={`navbar ${scrolled ? 'scrolled' : ''}`}>
         <div className="container">
           <div className="nav-logo">
@@ -100,7 +100,7 @@ function App() {
         </div>
       </nav>
 
-      {/* ========== HERO ========== */}
+      {}
       <section id="hero" className="hero">
         <div className="hero-bg">
           <div className="hero-gradient-1" />
@@ -145,7 +145,7 @@ function App() {
         </div>
       </section>
 
-      {/* ========== ABOUT ========== */}
+      {}
       <section id="about" className="section">
         <div className="container">
           <div className="section-header reveal">
@@ -207,7 +207,7 @@ function App() {
         </div>
       </section>
 
-      {/* ========== PROJECTS ========== */}
+      {}
       <section id="projects" className="section" style={{ background: 'rgba(15,23,42,0.5)' }}>
         <div className="container">
           <div className="section-header reveal">
@@ -284,7 +284,7 @@ function App() {
         </div>
       </section>
 
-      {/* ========== RESUME ========== */}
+      {}
       {profile?.resumeUrl && (
         <section id="resume" className="section resume-section">
           <div className="container">
@@ -309,7 +309,7 @@ function App() {
         </section>
       )}
 
-      {/* ========== CONTACT ========== */}
+      {}
       <section id="contact" className="section" style={{ background: 'rgba(15,23,42,0.5)' }}>
         <div className="container">
           <div className="section-header reveal">
@@ -379,7 +379,7 @@ function App() {
         </div>
       </section>
 
-      {/* ========== FOOTER ========== */}
+      {}
       <footer className="footer">
         <div className="container">
           <p>© {new Date().getFullYear()} {profile?.name || 'Portfolio'}. Built with ❤️</p>
@@ -397,7 +397,7 @@ function App() {
         </div>
       </footer>
 
-      {/* ========== PROJECT DETAIL MODAL ========== */}
+      {}
       {selectedProject && (
         <div className="project-modal-overlay" onClick={() => setSelectedProject(null)}>
           <div className="project-modal" onClick={(e) => e.stopPropagation()}>
