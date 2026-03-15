@@ -35,7 +35,21 @@ export interface Profile {
     resumeUrl: string;
 }
 
-export const getProjects = () => api.get<{ projects: Project[] }>('/projects');
-export const getProfile = () => api.get<{ profile: Profile }>('/profile');
+export const getProfile = (username: string) =>
+    api.get<{ success: boolean; profile: Profile }>(`/profile/public/${username}`);
+
+export const getProjects = (username: string) =>
+    api.get<{ success: boolean; projects: Project[] }>(`/projects/public/${username}`);
+
+export const sendContactEmail = (username: string, formData: FormData) =>
+    api.post(`/contact/${username}`, formData, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+    });
+
+export const getErrorMessage = (error: any): string => {
+    if (error.response?.data?.message) return error.response.data.message;
+    if (error.message === 'Network Error') return 'Cannot connect to server. Please try again later.';
+    return 'Something went wrong. Please try again.';
+};
 
 export default api;
