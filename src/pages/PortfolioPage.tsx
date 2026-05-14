@@ -57,7 +57,7 @@ const PortfolioPage = () => {
                 getProjects(username!)
             ]);
             setProfile(profileRes.data.profile);
-            
+
             // Only show projects that have the "Featured" toggle ON
             const visibleProjects = projectsRes.data.projects.filter((p: Project) => p.featured);
             setProjects(visibleProjects);
@@ -156,13 +156,13 @@ const PortfolioPage = () => {
                         <li><a onClick={() => scrollToSection('about')}>About</a></li>
                         {projects.length > 0 && <li><a onClick={() => scrollToSection('projects')}>Projects</a></li>}
                         <li><a onClick={() => scrollToSection('contact')}>Contact</a></li>
-                         {profile?.resumeUrl && (
+                        {profile?.resumeUrl && (
                             <li>
-                                <a 
-                                    href={profile.resumeUrl} 
-                                    download 
-                                    target="_blank" 
-                                    rel="noopener noreferrer" 
+                                <a
+                                    href={profile.resumeUrl}
+                                    download
+                                    target="_blank"
+                                    rel="noopener noreferrer"
                                     className="nav-resume-btn"
                                     style={{ textDecoration: 'none' }}
                                 >
@@ -207,7 +207,7 @@ const PortfolioPage = () => {
                                 <HiOutlineMail /> Get In Touch
                             </button>
                         </div>
-                         {projects.length > 0 && (
+                        {projects.length > 0 && (
                             <div className="hero-stats">
                                 <div className="hero-stat">
                                     <h3>{projects.length}<span>+</span></h3>
@@ -285,83 +285,83 @@ const PortfolioPage = () => {
 
             {projects.length > 0 && (
                 <section id="projects" className="section" style={{ background: 'rgba(15,23,42,0.5)' }}>
-                <div className="container">
-                    <div className="section-header reveal">
-                        <div className="section-label">My Work</div>
-                        <h2 className="section-title">Featured Projects</h2>
-                        <p className="section-subtitle">
-                            Here are some of the projects I've worked on. Each one was built with passion and attention to detail.
-                        </p>
-                        <div className="section-divider" />
-                    </div>
+                    <div className="container">
+                        <div className="section-header reveal">
+                            <div className="section-label">My Work</div>
+                            <h2 className="section-title">Featured Projects</h2>
+                            <p className="section-subtitle">
+                                Here are some of the projects I've worked on. Each one was built with passion and attention to detail.
+                            </p>
+                            <div className="section-divider" />
+                        </div>
 
-                    {categories.length > 2 && (
-                        <div className="projects-filter reveal">
-                            {categories.map((cat) => (
-                                <button
-                                    key={cat}
-                                    className={`filter-btn ${filter === cat ? 'active' : ''}`}
-                                    onClick={() => setFilter(cat)}
+                        {categories.length > 2 && (
+                            <div className="projects-filter reveal">
+                                {categories.map((cat) => (
+                                    <button
+                                        key={cat}
+                                        className={`filter-btn ${filter === cat ? 'active' : ''}`}
+                                        onClick={() => setFilter(cat)}
+                                    >
+                                        {cat}
+                                    </button>
+                                ))}
+                            </div>
+                        )}
+
+                        <div className="projects-grid">
+                            {filteredProjects.map((project, index) => (
+                                <div
+                                    key={project._id}
+                                    className={`project-card reveal reveal-delay-${Math.min(index + 1, 5)}`}
                                 >
-                                    {cat}
-                                </button>
+                                    <div className="project-thumb-wrapper">
+                                        {project.thumbnail ? (
+                                            <img src={project.thumbnail} alt={project.title} />
+                                        ) : (
+                                            <div className="project-thumb-placeholder">🚀</div>
+                                        )}
+                                        <div className="project-thumb-overlay">
+                                            <button className="project-overlay-btn" onClick={() => setSelectedProject(project)}>
+                                                <HiOutlineExternalLink /> Details
+                                            </button>
+                                            {project.liveUrl && (
+                                                <a href={project.liveUrl} target="_blank" rel="noopener noreferrer" className="project-overlay-btn">
+                                                    Live ↗
+                                                </a>
+                                            )}
+                                            {project.githubUrl && (
+                                                <a href={project.githubUrl} target="_blank" rel="noopener noreferrer" className="project-overlay-btn">
+                                                    <FaGithub /> Code
+                                                </a>
+                                            )}
+                                        </div>
+                                    </div>
+                                    <div className="project-body">
+                                        <div className="project-category">{project.category}</div>
+                                        <h3>{project.title}</h3>
+                                        <p>{project.description}</p>
+                                        <div className="project-tech">
+                                            {project.techStack.map((tech, i) => (
+                                                <span key={i} className="project-tech-chip">{tech}</span>
+                                            ))}
+                                        </div>
+                                    </div>
+                                </div>
                             ))}
                         </div>
-                    )}
 
-                    <div className="projects-grid">
-                        {filteredProjects.map((project, index) => (
-                            <div
-                                key={project._id}
-                                className={`project-card reveal reveal-delay-${Math.min(index + 1, 5)}`}
-                            >
-                                <div className="project-thumb-wrapper">
-                                    {project.thumbnail ? (
-                                        <img src={project.thumbnail} alt={project.title} />
-                                    ) : (
-                                        <div className="project-thumb-placeholder">🚀</div>
-                                    )}
-                                    <div className="project-thumb-overlay">
-                                        <button className="project-overlay-btn" onClick={() => setSelectedProject(project)}>
-                                            <HiOutlineExternalLink /> Details
-                                        </button>
-                                        {project.liveUrl && (
-                                            <a href={project.liveUrl} target="_blank" rel="noopener noreferrer" className="project-overlay-btn">
-                                                Live ↗
-                                            </a>
-                                        )}
-                                        {project.githubUrl && (
-                                            <a href={project.githubUrl} target="_blank" rel="noopener noreferrer" className="project-overlay-btn">
-                                                <FaGithub /> Code
-                                            </a>
-                                        )}
-                                    </div>
-                                </div>
-                                <div className="project-body">
-                                    <div className="project-category">{project.category}</div>
-                                    <h3>{project.title}</h3>
-                                    <p>{project.description}</p>
-                                    <div className="project-tech">
-                                        {project.techStack.map((tech, i) => (
-                                            <span key={i} className="project-tech-chip">{tech}</span>
-                                        ))}
-                                    </div>
-                                </div>
+                        {filteredProjects.length === 0 && (
+                            <div className="reveal" style={{ textAlign: 'center', padding: 60, color: 'var(--neutral-500)' }}>
+                                <p style={{ fontSize: 48, marginBottom: 16 }}>🔍</p>
+                                <p>No projects found in this category</p>
                             </div>
-                        ))}
+                        )}
                     </div>
-
-                    {filteredProjects.length === 0 && (
-                        <div className="reveal" style={{ textAlign: 'center', padding: 60, color: 'var(--neutral-500)' }}>
-                            <p style={{ fontSize: 48, marginBottom: 16 }}>🔍</p>
-                            <p>No projects found in this category</p>
-                        </div>
-                    )}
-                </div>
                 </section>
             )}
 
-             {profile?.resumeUrl && (
+            {profile?.resumeUrl && (
                 <section id="resume" className="section" style={{ background: 'var(--neutral-900)' }}>
                     <div className="container">
                         <div className="section-header reveal">
@@ -370,10 +370,10 @@ const PortfolioPage = () => {
                             <div className="section-divider" />
                         </div>
                         <div className="resume-container reveal" style={{ marginTop: 40, height: '1150px', borderRadius: 'var(--radius-xl)', overflow: 'hidden', border: '1px solid var(--neutral-800)', boxShadow: 'var(--shadow-lg)' }}>
-                            <iframe 
-                                src={`${profile.resumeUrl}#toolbar=0&navpanes=0&scrollbar=0`} 
-                                title="Resume" 
-                                style={{ width: '100%', height: '100%', border: 'none' }} 
+                            <iframe
+                                src={`${profile.resumeUrl}#toolbar=0&navpanes=0&scrollbar=0`}
+                                title="Resume"
+                                style={{ width: '100%', height: '100%', border: 'none' }}
                             />
                         </div>
                         <div style={{ textAlign: 'center', marginTop: 40 }} className="reveal">
@@ -534,7 +534,7 @@ const PortfolioPage = () => {
 
             <footer className="footer" style={{ padding: '60px 0', background: 'var(--neutral-900)', borderTop: '1px solid var(--neutral-800)' }}>
                 <div className="container" style={{ textAlign: 'center' }}>
-                    <p style={{ color: 'var(--neutral-400)', fontSize: 14 }}>© {new Date().getFullYear()} {profile?.name || 'Portfolio'}. Built with ❤️</p>
+                    <p style={{ color: 'var(--neutral-400)', fontSize: 14 }}>© {new Date().getFullYear()} {profile?.name || 'Portfolio'}. </p>
                     <div className="footer-links" style={{ display: 'flex', justifyContent: 'center', gap: 20, marginTop: 20 }}>
                         {profile?.github && (
                             <a href={profile.github} target="_blank" rel="noopener noreferrer" style={{ color: 'var(--neutral-400)', fontSize: 20 }}><FaGithub /></a>

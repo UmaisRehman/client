@@ -35,7 +35,7 @@ const HomePage = () => {
             </div>
             <footer className="footer" style={{ position: 'fixed', bottom: 0, left: 0, right: 0 }}>
                 <div className="container">
-                    <p>© {new Date().getFullYear()} Portfolio Platform. Built with ❤️</p>
+                    <p>© {new Date().getFullYear()} Portfolio Platform.</p>
                 </div>
             </footer>
         </div>
