@@ -48,7 +48,7 @@ const PortfolioPage = () => {
 
         document.querySelectorAll('.reveal').forEach((el) => observer.observe(el));
         return () => observer.disconnect();
-    }, [loading]);
+    }, [loading, projects, profile]);
 
     const fetchData = async () => {
         try {
@@ -145,17 +145,27 @@ const PortfolioPage = () => {
         <>
             <nav className={`navbar ${scrolled ? 'scrolled' : ''}`}>
                 <div className="container">
-                    <div className="nav-logo">
-                        {profile?.name?.split(' ')[0] || 'Portfolio'}
+                    <div className="nav-logo" onClick={() => scrollToSection('hero')}>
+                        {profile?.avatarUrl && (
+                            <img src={profile.avatarUrl} alt={profile.name} className="nav-avatar" />
+                        )}
+                        <span>{profile?.name?.split(' ')[0] || 'Portfolio'}</span>
                     </div>
                     <ul className={`nav-links ${mobileMenuOpen ? 'open' : ''}`}>
                         <li><a onClick={() => scrollToSection('hero')}>Home</a></li>
                         <li><a onClick={() => scrollToSection('about')}>About</a></li>
                         {projects.length > 0 && <li><a onClick={() => scrollToSection('projects')}>Projects</a></li>}
                         <li><a onClick={() => scrollToSection('contact')}>Contact</a></li>
-                        {profile?.resumeUrl && (
+                         {profile?.resumeUrl && (
                             <li>
-                                <a href={profile.resumeUrl} target="_blank" rel="noopener noreferrer" className="nav-resume-btn">
+                                <a 
+                                    href={profile.resumeUrl} 
+                                    download 
+                                    target="_blank" 
+                                    rel="noopener noreferrer" 
+                                    className="nav-resume-btn"
+                                    style={{ textDecoration: 'none' }}
+                                >
                                     Resume
                                 </a>
                             </li>
@@ -197,14 +207,20 @@ const PortfolioPage = () => {
                                 <HiOutlineMail /> Get In Touch
                             </button>
                         </div>
-                        {projects.length > 0 && (
+                         {projects.length > 0 && (
                             <div className="hero-stats">
                                 <div className="hero-stat">
                                     <h3>{projects.length}<span>+</span></h3>
                                     <p>Projects</p>
                                 </div>
                                 <div className="hero-stat">
-                                    <h3>{new Set(projects.flatMap(p => p.techStack).map(t => t.trim().toLowerCase().replace(/[.,/#!$%^&*;:{}=\-_`~()]+$/, ''))).size}<span>+</span></h3>
+                                    <h3>
+                                        {new Set([
+                                            ...(profile?.skills || []),
+                                            ...projects.flatMap(p => p.techStack)
+                                        ].map(t => t.trim().toLowerCase().replace(/[.,/#!$%^&*;:{}=\-_`~()]+$/, ''))).size}
+                                        <span>+</span>
+                                    </h3>
                                     <p>Technologies</p>
                                 </div>
                             </div>
@@ -220,15 +236,8 @@ const PortfolioPage = () => {
                         <h2 className="section-title">Get To Know Me</h2>
                         <div className="section-divider" />
                     </div>
-                    <div className="about-grid">
-                        <div className="about-image-wrapper reveal">
-                            {profile?.avatarUrl ? (
-                                <img src={profile.avatarUrl} alt={profile.name} className="about-image" />
-                            ) : (
-                                <div className="about-image-placeholder">👨‍💻</div>
-                            )}
-                        </div>
-                        <div className="about-text reveal reveal-delay-2">
+                    <div className="about-content">
+                        <div className="about-text reveal">
                             <h3>{profile?.tagline ? profile.tagline : 'About Me'}</h3>
                             {profile?.bio && <p>{profile.bio}</p>}
 
@@ -264,7 +273,7 @@ const PortfolioPage = () => {
                                     <h4>Skills & Technologies</h4>
                                     <div className="skills-grid">
                                         {profile.skills.map((skill, i) => (
-                                            <span key={i} className={`skill-chip reveal-delay-${i}`}>{skill}</span>
+                                            <span key={i} className={`skill-chip reveal reveal-delay-${(i % 5) + 1}`}>{skill}</span>
                                         ))}
                                     </div>
                                 </div>
@@ -352,29 +361,25 @@ const PortfolioPage = () => {
                 </section>
             )}
 
-            {profile?.resumeUrl && (
-                <section id="resume" className="section resume-section">
+             {profile?.resumeUrl && (
+                <section id="resume" className="section" style={{ background: 'var(--neutral-900)' }}>
                     <div className="container">
                         <div className="section-header reveal">
                             <div className="section-label">Resume</div>
-                            <h2 className="section-title">My Resume</h2>
+                            <h2 className="section-title">My Professional CV</h2>
                             <div className="section-divider" />
                         </div>
-                        <div className="reveal">
-                            <div className="resume-viewer-container" style={{ width: '100%', height: '85vh', border: '1px solid var(--neutral-800)', borderRadius: '16px', overflow: 'hidden', marginBottom: '32px', background: 'var(--neutral-900)', boxShadow: '0 10px 30px rgba(0,0,0,0.5)' }}>
-                                <iframe 
-                                    src={`${profile.resumeUrl}#toolbar=0&navpanes=0&scrollbar=0`} 
-                                    width="100%" 
-                                    height="100%" 
-                                    style={{ border: 'none' }} 
-                                    title="Resume PDF"
-                                />
-                            </div>
-                            <div style={{ textAlign: 'center' }}>
-                                <a href={profile.resumeUrl} target="_blank" rel="noopener noreferrer" className="btn btn-primary" style={{ padding: '14px 32px', fontSize: '16px' }}>
-                                    <HiOutlineDocumentDownload /> Download Resume
-                                </a>
-                            </div>
+                        <div className="resume-container reveal" style={{ marginTop: 40, height: '1150px', borderRadius: 'var(--radius-xl)', overflow: 'hidden', border: '1px solid var(--neutral-800)', boxShadow: 'var(--shadow-lg)' }}>
+                            <iframe 
+                                src={`${profile.resumeUrl}#toolbar=0&navpanes=0&scrollbar=0`} 
+                                title="Resume" 
+                                style={{ width: '100%', height: '100%', border: 'none' }} 
+                            />
+                        </div>
+                        <div style={{ textAlign: 'center', marginTop: 40 }} className="reveal">
+                            <a href={profile.resumeUrl} download className="btn btn-primary">
+                                <HiOutlineDocumentDownload /> Download Full Resume
+                            </a>
                         </div>
                     </div>
                 </section>
@@ -525,18 +530,20 @@ const PortfolioPage = () => {
                 </div>
             </section>
 
-            <footer className="footer">
-                <div className="container">
-                    <p>© {new Date().getFullYear()} {profile?.name || 'Portfolio'}. Built with ❤️</p>
-                    <div className="footer-links">
+
+
+            <footer className="footer" style={{ padding: '60px 0', background: 'var(--neutral-900)', borderTop: '1px solid var(--neutral-800)' }}>
+                <div className="container" style={{ textAlign: 'center' }}>
+                    <p style={{ color: 'var(--neutral-400)', fontSize: 14 }}>© {new Date().getFullYear()} {profile?.name || 'Portfolio'}. Built with ❤️</p>
+                    <div className="footer-links" style={{ display: 'flex', justifyContent: 'center', gap: 20, marginTop: 20 }}>
                         {profile?.github && (
-                            <a href={profile.github} target="_blank" rel="noopener noreferrer"><FaGithub /></a>
+                            <a href={profile.github} target="_blank" rel="noopener noreferrer" style={{ color: 'var(--neutral-400)', fontSize: 20 }}><FaGithub /></a>
                         )}
                         {profile?.linkedin && (
-                            <a href={profile.linkedin} target="_blank" rel="noopener noreferrer"><FaLinkedinIn /></a>
+                            <a href={profile.linkedin} target="_blank" rel="noopener noreferrer" style={{ color: 'var(--neutral-400)', fontSize: 20 }}><FaLinkedinIn /></a>
                         )}
                         {profile?.email && (
-                            <a href={`mailto:${profile.email}`}><HiOutlineMail /></a>
+                            <a href={`mailto:${profile.email}`} style={{ color: 'var(--neutral-400)', fontSize: 20 }}><HiOutlineMail /></a>
                         )}
                     </div>
                 </div>

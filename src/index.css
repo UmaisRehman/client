@@ -1,5 +1,15 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Outfit:wght@300;400;500;600;700;800;900&display=swap');
 
+/* Aggressive Scrollbar Suppression */
+* {
+  scrollbar-width: none !important; /* Firefox */
+  -ms-overflow-style: none !important; /* IE and Edge */
+}
+
+*::-webkit-scrollbar {
+  display: none !important; /* Chrome, Safari and Opera */
+}
+
 :root {
   --primary-50: #eef2ff;
   --primary-100: #e0e7ff;
@@ -53,25 +63,12 @@ body {
   line-height: 1.7;
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
-  scrollbar-width: thin;
-  scrollbar-color: var(--primary-600) var(--neutral-900);
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
 }
 
 body::-webkit-scrollbar {
-  width: 8px;
-}
-
-body::-webkit-scrollbar-track {
-  background: var(--neutral-900);
-}
-
-body::-webkit-scrollbar-thumb {
-  background: var(--primary-600);
-  border-radius: 4px;
-}
-
-body::-webkit-scrollbar-thumb:hover {
-  background: var(--primary-500);
+  display: none; /* Chrome, Safari and Opera */
 }
 
 a {
@@ -126,7 +123,22 @@ a:hover {
   color: var(--neutral-50);
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.nav-logo:hover {
+  transform: scale(1.02);
+}
+
+.nav-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid var(--primary-500);
+  box-shadow: 0 0 15px rgba(99, 102, 241, 0.3);
 }
 
 .nav-logo-icon {
@@ -439,13 +451,15 @@ a:hover {
 /* ============ REVEAL ANIMATION ============ */
 .reveal {
   opacity: 0;
-  transform: translateY(40px);
-  transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+  transform: translateY(30px) scale(0.95);
+  transition: all 1s cubic-bezier(0.16, 1, 0.3, 1);
+  pointer-events: none;
 }
 
 .reveal.visible {
   opacity: 1;
-  transform: translateY(0);
+  transform: translateY(0) scale(1);
+  pointer-events: auto;
 }
 
 .reveal-delay-1 {
@@ -469,44 +483,22 @@ a:hover {
 }
 
 /* ============ ABOUT ============ */
-.about-grid {
-  display: grid;
-  grid-template-columns: 1fr 1.2fr;
-  gap: 60px;
-  align-items: center;
+.about-content {
+  max-width: 900px;
+  margin: 0 auto;
+  text-align: center;
 }
 
-.about-image-wrapper {
-  position: relative;
-}
-
-.about-image {
-  width: 100%;
-  aspect-ratio: 1;
-  object-fit: cover;
-  border-radius: 20px;
-  border: 2px solid var(--neutral-800);
-}
-
-.about-image-placeholder {
-  width: 100%;
-  aspect-ratio: 1;
-  background: linear-gradient(135deg, var(--neutral-800), var(--neutral-900));
-  border-radius: 20px;
+.about-info-grid {
   display: flex;
-  align-items: center;
   justify-content: center;
-  font-size: 80px;
-  color: var(--neutral-700);
+  flex-wrap: wrap;
+  gap: 32px;
+  margin-bottom: 28px;
 }
 
-.about-image-wrapper::after {
-  content: '';
-  position: absolute;
-  inset: -8px;
-  border-radius: 24px;
-  border: 2px solid rgba(99, 102, 241, 0.15);
-  z-index: -1;
+.about-text h3 {
+  text-align: center;
 }
 
 .about-text h3 {
