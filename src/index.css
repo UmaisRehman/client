@@ -65,20 +65,39 @@ body {
   -webkit-font-smoothing: antialiased;
   scrollbar-width: none; /* Firefox */
   -ms-overflow-style: none; /* IE and Edge */
+  cursor: none; /* Custom cursor replaces default */
 }
 
 body::-webkit-scrollbar {
   display: none; /* Chrome, Safari and Opera */
 }
 
+/* Restore default cursor on touch devices */
+@media (hover: none) and (pointer: coarse) {
+  body {
+    cursor: auto;
+  }
+}
+
 a {
   color: var(--primary-400);
   text-decoration: none;
   transition: color 0.2s ease;
+  cursor: none;
 }
 
 a:hover {
   color: var(--primary-300);
+}
+
+button {
+  cursor: none;
+}
+
+@media (hover: none) and (pointer: coarse) {
+  a, button {
+    cursor: auto;
+  }
 }
 
 ::selection {
@@ -92,6 +111,142 @@ a:hover {
   padding: 0 24px;
 }
 
+/* ============ SCROLL PROGRESS BAR ============ */
+.scroll-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--primary-500), var(--accent-cyan), var(--accent-purple), var(--accent-pink));
+  transform-origin: left;
+  z-index: 9999;
+}
+
+/* ============ CUSTOM CURSOR ============ */
+.custom-cursor {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 20px;
+  height: 20px;
+  background: rgba(99, 102, 241, 0.15);
+  border: 1.5px solid rgba(99, 102, 241, 0.5);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 99999;
+  transform: translate(-50%, -50%);
+  mix-blend-mode: difference;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(2px);
+}
+
+.custom-cursor-dot {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 5px;
+  height: 5px;
+  background: var(--primary-400);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 99999;
+  transform: translate(-50%, -50%);
+}
+
+.cursor-text {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--primary-300);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  white-space: nowrap;
+}
+
+@media (hover: none) and (pointer: coarse) {
+  .custom-cursor,
+  .custom-cursor-dot {
+    display: none !important;
+  }
+}
+
+/* ============ PRELOADER ============ */
+.preloader {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.preloader-curtain {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 50%;
+  background: var(--neutral-950);
+  z-index: 1;
+}
+
+.preloader-curtain-top {
+  top: 0;
+}
+
+.preloader-curtain-bottom {
+  bottom: 0;
+}
+
+.preloader-content {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+}
+
+.preloader-ring {
+  position: relative;
+  width: 120px;
+  height: 120px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.preloader-counter {
+  position: absolute;
+  font-family: var(--font-heading);
+  font-size: 24px;
+  font-weight: 800;
+  color: var(--neutral-50);
+  letter-spacing: 2px;
+}
+
+.preloader-greeting {
+  font-family: var(--font-heading);
+  font-size: clamp(24px, 4vw, 36px);
+  font-weight: 700;
+  color: var(--neutral-50);
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.preloader-name {
+  font-family: var(--font-heading);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--neutral-500);
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+}
+
+/* ============ NAVBAR ============ */
 .navbar {
   position: fixed;
   top: 0;
@@ -99,13 +254,14 @@ a:hover {
   right: 0;
   z-index: 100;
   padding: 16px 0;
-  transition: all 0.3s ease;
+  transition: background 0.4s ease, padding 0.3s ease, backdrop-filter 0.4s ease;
   background: transparent;
 }
 
 .navbar.scrolled {
   background: rgba(2, 6, 23, 0.85);
   backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
   border-bottom: 1px solid rgba(255, 255, 255, 0.05);
   padding: 12px 0;
 }
@@ -124,7 +280,7 @@ a:hover {
   display: flex;
   align-items: center;
   gap: 12px;
-  cursor: pointer;
+  cursor: none;
   transition: transform 0.3s ease;
 }
 
@@ -139,6 +295,11 @@ a:hover {
   object-fit: cover;
   border: 2px solid var(--primary-500);
   box-shadow: 0 0 15px rgba(99, 102, 241, 0.3);
+  transition: box-shadow 0.3s ease;
+}
+
+.nav-avatar:hover {
+  box-shadow: 0 0 25px rgba(99, 102, 241, 0.5);
 }
 
 .nav-logo-icon {
@@ -164,6 +325,7 @@ a:hover {
   font-weight: 500;
   transition: color 0.2s ease;
   position: relative;
+  cursor: none;
 }
 
 .nav-links a:hover,
@@ -178,8 +340,9 @@ a:hover {
   left: 0;
   width: 0;
   height: 2px;
-  background: var(--primary-500);
+  background: linear-gradient(90deg, var(--primary-500), var(--accent-cyan));
   transition: width 0.3s ease;
+  border-radius: 2px;
 }
 
 .nav-links a:hover::after,
@@ -200,7 +363,7 @@ a:hover {
 
 .nav-resume-btn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(99, 102, 241, 0.4);
+  box-shadow: 0 8px 25px rgba(99, 102, 241, 0.5);
 }
 
 .nav-mobile-btn {
@@ -209,7 +372,7 @@ a:hover {
   border: none;
   color: var(--neutral-200);
   font-size: 24px;
-  cursor: pointer;
+  cursor: none;
 }
 
 /* ============ HERO ============ */
@@ -236,7 +399,7 @@ a:hover {
   top: -100px;
   right: -100px;
   border-radius: 50%;
-  animation: float 8s ease-in-out infinite;
+  will-change: transform;
 }
 
 .hero-gradient-2 {
@@ -247,7 +410,7 @@ a:hover {
   bottom: -50px;
   left: -100px;
   border-radius: 50%;
-  animation: float 10s ease-in-out infinite reverse;
+  will-change: transform;
 }
 
 .hero-gradient-3 {
@@ -271,6 +434,60 @@ a:hover {
   background-size: 60px 60px;
 }
 
+/* Floating geometric shapes */
+.float-shape {
+  position: absolute;
+  border-radius: 50%;
+  opacity: 0.15;
+  will-change: transform;
+  pointer-events: none;
+}
+
+.float-shape-1 {
+  width: 12px;
+  height: 12px;
+  background: var(--primary-400);
+  top: 20%;
+  right: 15%;
+}
+
+.float-shape-2 {
+  width: 8px;
+  height: 8px;
+  background: var(--accent-cyan);
+  top: 60%;
+  right: 25%;
+  border-radius: 2px;
+}
+
+.float-shape-3 {
+  width: 16px;
+  height: 16px;
+  border: 2px solid var(--accent-purple);
+  background: transparent;
+  top: 35%;
+  right: 10%;
+}
+
+.float-shape-4 {
+  width: 6px;
+  height: 6px;
+  background: var(--accent-pink);
+  top: 75%;
+  right: 35%;
+}
+
+.float-shape-5 {
+  width: 20px;
+  height: 20px;
+  border: 1.5px solid var(--primary-300);
+  background: transparent;
+  top: 15%;
+  right: 40%;
+  border-radius: 4px;
+  transform: rotate(45deg);
+}
+
 .hero-content {
   position: relative;
   z-index: 1;
@@ -289,7 +506,6 @@ a:hover {
   font-size: 13px;
   font-weight: 600;
   margin-bottom: 24px;
-  animation: fadeInUp 0.8s ease 0.2s both;
 }
 
 .hero-badge::before {
@@ -308,7 +524,6 @@ a:hover {
   line-height: 1.1;
   color: var(--neutral-50);
   margin-bottom: 20px;
-  animation: fadeInUp 0.8s ease 0.4s both;
 }
 
 .hero h1 .gradient-text {
@@ -318,19 +533,40 @@ a:hover {
   background-clip: text;
 }
 
+/* Shimmer gradient animation on the name */
+.gradient-text-shimmer {
+  background: linear-gradient(
+    90deg,
+    var(--primary-400) 0%,
+    var(--accent-cyan) 25%,
+    var(--accent-purple) 50%,
+    var(--accent-pink) 75%,
+    var(--primary-400) 100%
+  );
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: shimmer 4s linear infinite;
+}
+
+@keyframes shimmer {
+  to {
+    background-position: 200% center;
+  }
+}
+
 .hero-description {
   font-size: 18px;
   color: var(--neutral-400);
   line-height: 1.8;
   margin-bottom: 32px;
   max-width: 550px;
-  animation: fadeInUp 0.8s ease 0.6s both;
 }
 
 .hero-buttons {
   display: flex;
   gap: 16px;
-  animation: fadeInUp 0.8s ease 0.8s both;
 }
 
 .btn {
@@ -341,10 +577,18 @@ a:hover {
   border-radius: 12px;
   font-size: 15px;
   font-weight: 600;
-  cursor: pointer;
+  cursor: none;
   transition: all 0.3s ease;
   border: none;
   font-family: var(--font-body);
+  position: relative;
+  overflow: hidden;
+}
+
+@media (hover: none) and (pointer: coarse) {
+  .btn {
+    cursor: auto;
+  }
 }
 
 .btn-primary {
@@ -355,7 +599,21 @@ a:hover {
 
 .btn-primary:hover {
   transform: translateY(-3px);
-  box-shadow: 0 8px 30px rgba(99, 102, 241, 0.4);
+  box-shadow: 0 8px 30px rgba(99, 102, 241, 0.5);
+}
+
+/* Ripple hover effect on primary buttons */
+.btn-primary::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, transparent 60%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.btn-primary:hover::before {
+  opacity: 1;
 }
 
 .btn-outline {
@@ -374,7 +632,6 @@ a:hover {
   display: flex;
   gap: 40px;
   margin-top: 48px;
-  animation: fadeInUp 0.8s ease 1s both;
 }
 
 .hero-stat h3 {
@@ -392,6 +649,53 @@ a:hover {
   font-size: 13px;
   color: var(--neutral-500);
   margin-top: 2px;
+}
+
+/* ============ MARQUEE ============ */
+.marquee-section {
+  padding: 30px 0;
+  overflow: hidden;
+  border-top: 1px solid rgba(99, 102, 241, 0.08);
+  border-bottom: 1px solid rgba(99, 102, 241, 0.08);
+  background: rgba(99, 102, 241, 0.02);
+}
+
+.marquee-container {
+  overflow: hidden;
+  white-space: nowrap;
+  width: 100%;
+}
+
+.marquee-track {
+  display: inline-flex;
+  will-change: transform;
+}
+
+.marquee-content {
+  font-family: var(--font-heading);
+  font-size: clamp(18px, 2.5vw, 28px);
+  font-weight: 800;
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(99, 102, 241, 0.25);
+  text-transform: uppercase;
+  letter-spacing: 4px;
+  padding-right: 0;
+  white-space: nowrap;
+}
+
+.footer-marquee {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  opacity: 0.06;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.footer-marquee .marquee-content {
+  font-size: clamp(60px, 10vw, 120px);
+  -webkit-text-stroke: 2px rgba(99, 102, 241, 0.4);
 }
 
 /* ============ SECTIONS ============ */
@@ -441,45 +745,10 @@ a:hover {
 }
 
 .section-divider {
-  width: 60px;
   height: 3px;
-  background: var(--primary-500);
+  background: linear-gradient(90deg, var(--primary-500), var(--accent-cyan));
   border-radius: 2px;
   margin: 16px auto 0;
-}
-
-/* ============ REVEAL ANIMATION ============ */
-.reveal {
-  opacity: 0;
-  transform: translateY(30px) scale(0.95);
-  transition: all 1s cubic-bezier(0.16, 1, 0.3, 1);
-  pointer-events: none;
-}
-
-.reveal.visible {
-  opacity: 1;
-  transform: translateY(0) scale(1);
-  pointer-events: auto;
-}
-
-.reveal-delay-1 {
-  transition-delay: 0.1s;
-}
-
-.reveal-delay-2 {
-  transition-delay: 0.2s;
-}
-
-.reveal-delay-3 {
-  transition-delay: 0.3s;
-}
-
-.reveal-delay-4 {
-  transition-delay: 0.4s;
-}
-
-.reveal-delay-5 {
-  transition-delay: 0.5s;
 }
 
 /* ============ ABOUT ============ */
@@ -490,18 +759,14 @@ a:hover {
 }
 
 .about-info-grid {
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
-  gap: 32px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
   margin-bottom: 28px;
 }
 
 .about-text h3 {
   text-align: center;
-}
-
-.about-text h3 {
   font-family: var(--font-heading);
   font-size: 28px;
   font-weight: 700;
@@ -514,13 +779,6 @@ a:hover {
   font-size: 15px;
   line-height: 1.8;
   margin-bottom: 24px;
-}
-
-.about-info-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 16px;
-  margin-bottom: 28px;
 }
 
 .about-info-item {
@@ -557,6 +815,7 @@ a:hover {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
+  justify-content: center;
 }
 
 .skill-chip {
@@ -568,14 +827,17 @@ a:hover {
   font-weight: 600;
   color: var(--primary-300);
   transition: all 0.3s ease;
+  will-change: transform;
 }
 
 .skill-chip:hover {
-  background: rgba(99, 102, 241, 0.15);
+  background: rgba(99, 102, 241, 0.2);
   border-color: var(--primary-400);
-  transform: translateY(-2px);
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 0 8px 20px rgba(99, 102, 241, 0.15);
 }
 
+/* ============ PROJECTS ============ */
 .projects-filter {
   display: flex;
   justify-content: center;
@@ -592,9 +854,17 @@ a:hover {
   color: var(--neutral-400);
   font-size: 13px;
   font-weight: 600;
-  cursor: pointer;
+  cursor: none;
   transition: all 0.3s ease;
   font-family: var(--font-body);
+  position: relative;
+  overflow: hidden;
+}
+
+@media (hover: none) and (pointer: coarse) {
+  .filter-btn {
+    cursor: auto;
+  }
 }
 
 .filter-btn:hover {
@@ -609,6 +879,14 @@ a:hover {
   box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
 }
 
+.filter-active-bg {
+  position: absolute;
+  inset: 0;
+  background: var(--primary-600);
+  border-radius: 9999px;
+  z-index: -1;
+}
+
 .projects-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
@@ -620,14 +898,41 @@ a:hover {
   border: 1px solid var(--neutral-800);
   border-radius: 20px;
   overflow: hidden;
-  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: border-color 0.4s ease, box-shadow 0.4s ease;
   position: relative;
+  will-change: transform;
 }
 
 .project-card:hover {
-  transform: translateY(-8px);
   border-color: rgba(99, 102, 241, 0.3);
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3), 0 0 30px rgba(99, 102, 241, 0.1);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3), 0 0 40px rgba(99, 102, 241, 0.08);
+}
+
+/* Animated gradient border on hover */
+.project-card::before {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: 21px;
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0), rgba(99, 102, 241, 0.3), rgba(34, 211, 238, 0.2), rgba(99, 102, 241, 0));
+  background-size: 300% 300%;
+  z-index: -1;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  animation: borderGlow 4s ease infinite;
+}
+
+.project-card:hover::before {
+  opacity: 1;
+}
+
+@keyframes borderGlow {
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
 }
 
 .project-thumb-wrapper {
@@ -685,13 +990,19 @@ a:hover {
   color: #fff;
   font-size: 13px;
   font-weight: 600;
-  cursor: pointer;
+  cursor: none;
   transition: all 0.2s ease;
   font-family: var(--font-body);
   display: inline-flex;
   align-items: center;
   gap: 6px;
   text-decoration: none;
+}
+
+@media (hover: none) and (pointer: coarse) {
+  .project-overlay-btn {
+    cursor: auto;
+  }
 }
 
 .project-overlay-btn:hover {
@@ -747,19 +1058,23 @@ a:hover {
   font-size: 11px;
   font-weight: 600;
   color: var(--primary-300);
+  transition: all 0.2s ease;
 }
 
+.project-tech-chip:hover {
+  background: rgba(99, 102, 241, 0.15);
+}
+
+/* ============ PROJECT MODAL ============ */
 .project-modal-overlay {
   position: fixed;
   inset: 0;
   background: rgba(0, 0, 0, 0.8);
-  backdrop-filter: blur(8px);
   z-index: 200;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 24px;
-  animation: fadeIn 0.3s ease;
 }
 
 .project-modal {
@@ -772,7 +1087,6 @@ a:hover {
   max-height: 85vh;
   overflow-y: auto;
   overflow-x: hidden;
-  animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1);
   scrollbar-width: none;
   -ms-overflow-style: none;
 }
@@ -830,18 +1144,26 @@ a:hover {
   border-radius: 50%;
   color: #fff;
   font-size: 18px;
-  cursor: pointer;
+  cursor: none;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: background 0.2s;
+  transition: all 0.2s;
   z-index: 100;
 }
 
-.project-modal-close:hover {
-  background: rgba(255, 255, 255, 0.1);
+@media (hover: none) and (pointer: coarse) {
+  .project-modal-close {
+    cursor: auto;
+  }
 }
 
+.project-modal-close:hover {
+  background: rgba(255, 255, 255, 0.15);
+  transform: rotate(90deg);
+}
+
+/* ============ RESUME ============ */
 .resume-section {
   text-align: center;
 }
@@ -887,6 +1209,15 @@ a:hover {
   font-size: 14px;
 }
 
+/* ============ CONTACT ============ */
+.contact-layout {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
 .contact-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
@@ -903,13 +1234,13 @@ a:hover {
   background: var(--neutral-900);
   border: 1px solid var(--neutral-800);
   border-radius: 16px;
-  transition: all 0.3s ease;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .contact-card:hover {
   border-color: rgba(99, 102, 241, 0.3);
   transform: translateY(-4px);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2), 0 0 20px rgba(99, 102, 241, 0.05);
 }
 
 .contact-icon {
@@ -923,6 +1254,12 @@ a:hover {
   color: var(--primary-400);
   font-size: 20px;
   flex-shrink: 0;
+  transition: all 0.3s ease;
+}
+
+.contact-card:hover .contact-icon {
+  background: rgba(99, 102, 241, 0.2);
+  transform: scale(1.1);
 }
 
 .contact-card > div {
@@ -947,6 +1284,129 @@ a:hover {
   overflow-wrap: break-word;
 }
 
+/* ============ CONTACT FORM ============ */
+.contact-form-wrapper {
+  background: var(--neutral-900);
+  border: 1px solid var(--neutral-800);
+  border-radius: 20px;
+  padding: 36px;
+  transition: all 0.3s ease;
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.contact-form-wrapper:hover {
+  border-color: rgba(99, 102, 241, 0.2);
+  box-shadow: 0 0 40px rgba(99, 102, 241, 0.05);
+}
+
+.contact-form .form-group {
+  margin-bottom: 16px;
+}
+
+/* Floating label styles */
+.floating-label-group {
+  position: relative;
+}
+
+.floating-label-group label {
+  position: absolute;
+  left: 16px;
+  top: 14px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--neutral-500);
+  pointer-events: none;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  background: var(--neutral-800);
+  padding: 0 4px;
+}
+
+.floating-label-group .form-input:focus ~ label,
+.floating-label-group .form-input:not(:placeholder-shown) ~ label,
+.floating-label-group .form-textarea:focus ~ label,
+.floating-label-group .form-textarea:not(:placeholder-shown) ~ label {
+  top: -8px;
+  left: 12px;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--primary-400);
+  background: linear-gradient(180deg, var(--neutral-900) 50%, var(--neutral-800) 50%);
+}
+
+.contact-form .form-group label:not(.floating-label-group label) {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--neutral-300);
+  margin-bottom: 6px;
+}
+
+.form-input {
+  width: 100%;
+  padding: 12px 16px;
+  background: var(--neutral-800);
+  border: 1px solid var(--neutral-700);
+  border-radius: 10px;
+  color: var(--neutral-100);
+  font-size: 14px;
+  font-family: var(--font-body);
+  transition: all 0.3s ease;
+  outline: none;
+}
+
+.form-input:focus {
+  border-color: var(--primary-500);
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15), 0 0 20px rgba(99, 102, 241, 0.05);
+}
+
+.form-textarea {
+  width: 100%;
+  padding: 12px 16px;
+  background: var(--neutral-800);
+  border: 1px solid var(--neutral-700);
+  border-radius: 10px;
+  color: var(--neutral-100);
+  font-size: 14px;
+  font-family: var(--font-body);
+  transition: all 0.3s ease;
+  outline: none;
+  resize: vertical;
+  min-height: 120px;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.form-textarea::-webkit-scrollbar {
+  display: none;
+}
+
+.form-textarea:focus {
+  border-color: var(--primary-500);
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15), 0 0 20px rgba(99, 102, 241, 0.05);
+}
+
+.spinner {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: white;
+  border-radius: 50%;
+  animation: spin 0.6s linear infinite;
+}
+
+/* Send button hover effect */
+.btn-send {
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.btn-send:hover:not(:disabled) {
+  letter-spacing: 1px;
+}
+
+/* ============ FOOTER ============ */
 .footer {
   padding: 40px 0;
   border-top: 1px solid var(--neutral-800);
@@ -968,14 +1428,14 @@ a:hover {
 .footer-links a {
   color: var(--neutral-400);
   font-size: 20px;
-  transition: all 0.2s;
+  transition: all 0.3s ease;
 }
 
 .footer-links a:hover {
   color: var(--primary-400);
-  transform: translateY(-3px);
 }
 
+/* ============ LOADING/MISC ============ */
 .page-loader {
   position: fixed;
   inset: 0;
@@ -996,14 +1456,10 @@ a:hover {
   animation: spin 0.8s linear infinite;
 }
 
+/* ============ ANIMATIONS ============ */
 @keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-
-  to {
-    opacity: 1;
-  }
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
 @keyframes fadeInUp {
@@ -1011,7 +1467,6 @@ a:hover {
     opacity: 0;
     transform: translateY(30px);
   }
-
   to {
     opacity: 1;
     transform: translateY(0);
@@ -1023,7 +1478,6 @@ a:hover {
     opacity: 0;
     transform: translateY(30px) scale(0.98);
   }
-
   to {
     opacity: 1;
     transform: translateY(0) scale(1);
@@ -1031,25 +1485,19 @@ a:hover {
 }
 
 @keyframes float {
-
-  0%,
-  100% {
+  0%, 100% {
     transform: translate(0, 0);
   }
-
   50% {
     transform: translate(-20px, -30px);
   }
 }
 
 @keyframes pulse {
-
-  0%,
-  100% {
+  0%, 100% {
     opacity: 0.5;
     transform: translate(-50%, -50%) scale(1);
   }
-
   50% {
     opacity: 1;
     transform: translate(-50%, -50%) scale(1.1);
@@ -1057,21 +1505,12 @@ a:hover {
 }
 
 @keyframes blink {
-
-  0%,
-  100% {
-    opacity: 1;
-  }
-
-  50% {
-    opacity: 0.3;
-  }
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
 }
 
 @keyframes spin {
-  to {
-    transform: rotate(360deg);
-  }
+  to { transform: rotate(360deg); }
 }
 
 @keyframes fadeOut {
@@ -1081,94 +1520,17 @@ a:hover {
   }
 }
 
-/* ============ CONTACT FORM ============ */
-.contact-layout {
-  display: flex;
-  flex-direction: column;
-  gap: 40px;
-  max-width: 900px;
-  margin: 0 auto;
-}
-
-.contact-form-wrapper {
-  background: var(--neutral-900);
-  border: 1px solid var(--neutral-800);
-  border-radius: 20px;
-  padding: 36px;
-  transition: all 0.3s ease;
-  width: 100%;
-  max-width: 600px;
-  margin: 0 auto;
-}
-
-.contact-form-wrapper:hover {
-  border-color: rgba(99, 102, 241, 0.2);
-}
-
-.contact-form .form-group {
-  margin-bottom: 16px;
-}
-
-.contact-form .form-group label {
-  display: block;
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--neutral-300);
-  margin-bottom: 6px;
-}
-
-.form-input {
-  width: 100%;
-  padding: 12px 16px;
-  background: var(--neutral-800);
-  border: 1px solid var(--neutral-700);
-  border-radius: 10px;
-  color: var(--neutral-100);
-  font-size: 14px;
-  font-family: var(--font-body);
-  transition: all 0.2s ease;
-  outline: none;
-}
-
-.form-input:focus {
-  border-color: var(--primary-500);
-  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
-}
-
-.form-textarea {
-  width: 100%;
-  padding: 12px 16px;
-  background: var(--neutral-800);
-  border: 1px solid var(--neutral-700);
-  border-radius: 10px;
-  color: var(--neutral-100);
-  font-size: 14px;
-  font-family: var(--font-body);
-  transition: all 0.2s ease;
-  outline: none;
-  resize: vertical;
-  min-height: 120px;
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-}
-
-.form-textarea::-webkit-scrollbar {
-  display: none;
-}
-
-.form-textarea:focus {
-  border-color: var(--primary-500);
-  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
-}
-
-.spinner {
-  display: inline-block;
-  width: 20px;
-  height: 20px;
-  border: 2px solid rgba(255, 255, 255, 0.3);
-  border-top-color: white;
-  border-radius: 50%;
-  animation: spin 0.6s linear infinite;
+/* ============ NOISE TEXTURE OVERLAY ============ */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 99998;
+  opacity: 0.015;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 128px 128px;
 }
 
 /* ============ HOME LANDING ============ */
@@ -1185,6 +1547,165 @@ a:hover {
   background-clip: text;
 }
 
+/* ============ TEXT REVEAL ============ */
+.text-reveal {
+  will-change: contents;
+}
+
+/* ============ MAGNETIC WRAP ============ */
+.magnetic-wrap {
+  will-change: transform;
+}
+
+/* ============ GLOBAL SPOTLIGHT GLOW ============ */
+.global-spotlight {
+  position: fixed;
+  width: 900px;
+  height: 900px;
+  background: radial-gradient(circle, rgba(99, 102, 241, 0.08) 0%, rgba(34, 211, 238, 0.03) 35%, transparent 70%);
+  pointer-events: none;
+  left: 0;
+  top: 0;
+  margin-left: -450px;
+  margin-top: -450px;
+  z-index: 0;
+  will-change: transform;
+}
+
+/* ============ PROJECTS HORIZONTAL SCROLL ============ */
+.projects-scroll-wrapper {
+  position: relative;
+  width: 100%;
+  background: var(--neutral-950);
+  z-index: 10;
+}
+
+.projects-sticky-container {
+  position: relative;
+  height: 100vh;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+}
+
+.projects-horizontal-track {
+  display: flex;
+  align-items: center;
+  gap: 60px;
+  padding: 0 12vw;
+  width: max-content;
+  height: 100%;
+  will-change: transform;
+}
+
+.projects-horizontal-header {
+  width: 450px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.projects-horizontal-header h2 {
+  font-family: var(--font-heading);
+  font-size: clamp(36px, 5vw, 56px);
+  font-weight: 900;
+  line-height: 1.1;
+  color: var(--neutral-50);
+  margin-bottom: 20px;
+}
+
+.projects-horizontal-header p {
+  color: var(--neutral-400);
+  font-size: 16px;
+  line-height: 1.7;
+  margin-bottom: 30px;
+}
+
+.scroll-indicator-horizontal {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: var(--primary-400);
+  font-weight: 700;
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.scroll-indicator-horizontal span {
+  animation: bounceHorizontal 2s infinite;
+  display: inline-block;
+}
+
+@keyframes bounceHorizontal {
+  0%, 100% { transform: translateX(0); }
+  50% { transform: translateX(8px); }
+}
+
+.horizontal-project-card {
+  width: 500px;
+  flex-shrink: 0;
+  will-change: transform;
+}
+
+/* ============ SIDEBAR NAV DOTS ============ */
+.sidebar-nav-dots {
+  position: fixed;
+  right: 32px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  z-index: 90;
+}
+
+.sidebar-dot-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+  cursor: none;
+  background: none;
+  border: none;
+  padding: 4px;
+  outline: none;
+}
+
+.sidebar-dot-label {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: var(--primary-400);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  transform: translateX(10px);
+}
+
+.sidebar-dot-wrapper:hover .sidebar-dot-label {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.sidebar-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--neutral-700);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+}
+
+.sidebar-dot-wrapper.active .sidebar-dot {
+  background: var(--primary-500);
+  transform: scale(1.6);
+  box-shadow: 0 0 15px var(--primary-500);
+}
+
+/* ============ RESPONSIVE ============ */
 @media (max-width: 768px) {
   .nav-links {
     display: none;
@@ -1262,6 +1783,20 @@ a:hover {
     padding: 24px;
     max-width: 100%;
   }
+
+  /* Hide floating shapes on mobile */
+  .float-shape {
+    display: none;
+  }
+
+  /* Simplify cursor on mobile */
+  body {
+    cursor: auto;
+  }
+
+  a, button, .filter-btn, .project-overlay-btn, .project-modal-close {
+    cursor: auto;
+  }
 }
 
 @keyframes slideDown {
@@ -1269,7 +1804,6 @@ a:hover {
     opacity: 0;
     transform: translateY(-10px);
   }
-
   to {
     opacity: 1;
     transform: translateY(0);
