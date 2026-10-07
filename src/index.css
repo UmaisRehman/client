@@ -877,18 +877,42 @@ img {
   align-items: center;
   justify-content: center;
   padding: 24px;
+  overscroll-behavior: contain;
 }
 
 .modal-window {
   width: 100%;
   max-width: 760px;
-  max-height: 90vh;
+  max-height: 85vh;
   overflow-y: auto;
+  overflow-x: hidden;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  touch-action: pan-y;
   background: rgb(var(--surface-rgb));
   border: 1px solid rgb(var(--border-rgb) / 0.2);
   border-radius: var(--radius-lg);
   box-shadow: 0 30px 60px -15px rgba(0, 0, 0, 0.7);
   position: relative;
+  scrollbar-width: thin;
+  scrollbar-color: rgb(var(--border-rgb) / 0.5) transparent;
+}
+
+.modal-window::-webkit-scrollbar {
+  width: 6px;
+}
+
+.modal-window::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.modal-window::-webkit-scrollbar-thumb {
+  background: rgb(var(--border-rgb) / 0.4);
+  border-radius: 9999px;
+}
+
+.modal-window::-webkit-scrollbar-thumb:hover {
+  background: rgb(var(--primary-rgb) / 0.8);
 }
 
 .modal-close-btn {

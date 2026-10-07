@@ -14,23 +14,43 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({ project, onClose }) 
         const handleKeyDown = (e: KeyboardEvent) => {
             if (e.key === 'Escape') onClose();
         };
+
         if (project) {
+            // Stop background Lenis smooth scrolling
+            (window as any).__lenis?.stop();
+
+            // Lock native page scrollbars
+            const originalBodyOverflow = document.body.style.overflow;
+            const originalHtmlOverflow = document.documentElement.style.overflow;
             document.body.style.overflow = 'hidden';
+            document.documentElement.style.overflow = 'hidden';
+
             window.addEventListener('keydown', handleKeyDown);
+
+            return () => {
+                // Resume Lenis smooth scroll and restore page scroll
+                (window as any).__lenis?.start();
+                document.body.style.overflow = originalBodyOverflow;
+                document.documentElement.style.overflow = originalHtmlOverflow;
+                window.removeEventListener('keydown', handleKeyDown);
+            };
         }
-        return () => {
-            document.body.style.overflow = 'auto';
-            window.removeEventListener('keydown', handleKeyDown);
-        };
     }, [project, onClose]);
 
     return (
         <AnimatePresence>
             {project && (
-                <div className="modal-overlay" onClick={onClose}>
+                <div
+                    className="modal-overlay"
+                    onClick={onClose}
+                    data-lenis-prevent="true"
+                    onWheel={(e) => e.stopPropagation()}
+                >
                     <motion.div
                         className="modal-window"
                         onClick={(e) => e.stopPropagation()}
+                        data-lenis-prevent="true"
+                        onWheel={(e) => e.stopPropagation()}
                         initial={{ opacity: 0, scale: 0.9, y: 30 }}
                         animate={{ opacity: 1, scale: 1, y: 0 }}
                         exit={{ opacity: 0, scale: 0.9, y: 30 }}
